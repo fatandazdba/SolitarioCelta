@@ -1,5 +1,7 @@
 package es.upm.miw.SolitarioCelta;
 
+import android.util.Log;
+
 class JuegoCelta {
 	static final int TAMANIO = 7;
     private static final int NUM_MOVIMIENTOS = 4;
@@ -11,6 +13,15 @@ class JuegoCelta {
             {1, 1, 1, 1, 1, 1, 1},
             {1, 1, 1, 1, 1, 1, 1},
             {0, 0, 1, 1, 1, 0, 0},
+            {0, 0, 1, 1, 1, 0, 0}
+    };
+    private static final int[][] TABLERO_REINICIAR = { // Posiciones válidas del tablero para reiniciar le juego
+            {0, 0, 1, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0},
+            {1, 1, 1, 0, 0, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1},
+            {0, 0, 1, 0, 1, 0, 0},
             {0, 0, 1, 1, 1, 0, 0}
     };
     private static final int[][] desplazamientos = {
@@ -61,6 +72,10 @@ class JuegoCelta {
      * @return valor lógico
      */
     private boolean movimientoAceptable(int i1, int j1, int i2, int j2) {
+
+
+    	//Log.i("MENSAJE DE SERIALZION", serializaTablero());
+		//this.deserializaTablero("0011100001110011111111010011111111100111000011100");
 
         if (tablero[i1][j1] == 0 || tablero[i2][j2] == 1)
             return false;
