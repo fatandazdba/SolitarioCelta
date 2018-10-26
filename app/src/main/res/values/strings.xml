@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Solitario Celta</string>
+    <string name="aboutText">Acerca de</string>
+    <string name="aboutMessage">El juego consiste en ir comiendo piezas
+    (en horizontal o en vertical) hasta conseguir que sólo quede una pieza
+    en el centro. En cada movimiento, la pieza puede saltar solo una pieza.</string>
+    <string name="firstCategoryPrefTitle">Datos personales</string>
+    <string name="editTextPrefTitle">Nombre del jugador</string>
+    <string name="editTextPrefSummary">Pulse para teclear el nombre del jugador</string>
+    <string name="secondCategoryPrefTitle">Ajustes del juego</string>
+    <string name="preferencesText">Ajustes</string>
+    <string name="menuGuardarPartida">Guardar Partida</string>
+    <string name="menuReinicarPartida">Reiniciar Partida</string>
+
+    <!-- Diálogo Final -->
+    <string name="txtDialogoFinalTitulo">Fin del juego</string>
+    <string name="txtDialogoFinalPregunta">¿Quiere jugar otra partida?</string>
+    <string name="txtDialogoFinalAfirmativo">Sí</string>
+    <string name="txtDialogoFinalNegativo">No</string>
+
+</resources>
