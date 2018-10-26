@@ -6,8 +6,4 @@
             android:title="@string/editTextPrefTitle"
             android:summary="@string/editTextPrefSummary" />
     </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/secondCategoryPrefTitle">
-
-    </PreferenceCategory>
 </PreferenceScreen>

@@ -246,21 +246,4 @@
         app:layout_constraintStart_toEndOf="@id/p63"
         app:layout_constraintTop_toBottomOf="@id/p54" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="440dp"
-        tools:ignore="MissingConstraints">
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Reiniciar juego"
-            android:onClick="reiniciar_juego"/>
-    </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

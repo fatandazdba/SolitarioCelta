@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.reinicarPartida:
+                this.reiniciar_juego();
+                break;
             case R.id.menuAbout:
                 startActivity(new Intent(this, About.class));
                 return true;
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         t.show();
     }
 
-    public void reiniciar_juego(View view) {
+    public void reiniciar_juego() {
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
         dialogo1.setTitle("Importante");
         dialogo1.setMessage("¿ El programa será reiniciado, desea continuar ?");

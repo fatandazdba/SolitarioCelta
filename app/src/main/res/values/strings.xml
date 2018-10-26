@@ -11,8 +11,10 @@
     <string name="editTextPrefSummary">Pulse para teclear el nombre del jugador</string>
     <string name="secondCategoryPrefTitle">Ajustes del juego</string>
     <string name="preferencesText">Ajustes</string>
-    <string name="menuGuardarPartida">Guardar Partida</string>
-    <string name="menuReinicarPartida">Reiniciar Partida</string>
+    <string name="titleGuardarPartida">Guardar Partida</string>
+    <string name="descrGuardarPartida">Pulse para guardar la partida</string>
+    <string name="titleRecuperarPartida">Recuperar Partida</string>
+    <string name="mejoresResultados">Mejores Resultados</string>
 
     <!-- Diálogo Final -->
     <string name="txtDialogoFinalTitulo">Fin del juego</string>
