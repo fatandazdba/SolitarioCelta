@@ -12,9 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -22,16 +20,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 
 public class MainActivity extends AppCompatActivity {
 
 	JuegoCelta mJuego;
     private final String LOG_TAG = "MiW_JUEGO_CELTA";
     private final String CLAVE_TABLERO = "TABLERO_SOLITARIO_CELTA";
-
-    private EditText lineaTexto;
-    private TextView contenidoFichero;
 
     private SharedPreferences preferencias;
 
@@ -48,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        lineaTexto       = findViewById(R.id.textoIntroducido);
-        contenidoFichero = findViewById(R.id.contenidoFichero);
 
         mJuego = new JuegoCelta();
         mostrarTablero();
@@ -116,8 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 this.accionAniadir();
                 break;
             case R.id.recuperarPartida:
-                this.mostrarContenido();
-                //this.mostrarTablero();
+                this.recuperarPartidaFichero();
                 break;
             case R.id.menuAbout:
                 startActivity(new Intent(this, About.class));
@@ -129,23 +119,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void guardar_juego() {
-
-    }
-
-    public void aceptar() {
-        Toast t=Toast.makeText(this,"EL juego ha sido reiniciado.", Toast.LENGTH_SHORT);
-        t.show();
-        mJuego.reiniciar();
-        this.mostrarTablero();
-    }
-
-    public void cancelar() {
-        //finish();
-        Toast t=Toast.makeText(this,"Favor, continue con el juego.", Toast.LENGTH_SHORT);
-        t.show();
-    }
-
     public void reiniciar_juego() {
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
         dialogo1.setTitle("Importante");
@@ -153,25 +126,33 @@ public class MainActivity extends AppCompatActivity {
         dialogo1.setCancelable(false);
         dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
-                aceptar();
+                aceptarReiniciarPartida();
             }
         });
         dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
-                cancelar();
+                cancelarReiniciarPartida();
             }
         });
         dialogo1.show();
+    }
+    public void aceptarReiniciarPartida() {
+        Toast t=Toast.makeText(this,"EL juego ha sido reiniciado.", Toast.LENGTH_SHORT);
+        t.show();
+        mJuego.reiniciar();
+        this.mostrarTablero();
+    }
 
+    public void cancelarReiniciarPartida() {
+        Toast t=Toast.makeText(this,"Favor, continue con el juego.", Toast.LENGTH_SHORT);
+        t.show();
     }
 
     /**
-     * Al pulsar el botón añadir -> añadir al fichero.
-     * Después de añadir -> mostrarContenido()
+     * Crea e ingresa los datos al fichero
      */
     public void accionAniadir() {
         FileOutputStream fos;
-
         try {  // Añadir al fichero
             if (utilizarMemInterna()) {
                 fos = openFileOutput(obtenerNombreFichero(), Context.MODE_APPEND); // Memoria interna
@@ -194,26 +175,20 @@ public class MainActivity extends AppCompatActivity {
             fos.write(mJuego.serializaTablero().toString().getBytes()); //Almacena los datos de la tabla en el archivo
             fos.write('\n');
             fos.close();
-            //mostrarContenido();
             Log.i(LOG_TAG, "Click botón Añadir -> AÑADIR al fichero");
         } catch (Exception e) {
             Log.e(LOG_TAG, "FILE I/O ERROR: " + e.getMessage());
             e.printStackTrace();
         }
-        lineaTexto.setText(null);
     }
 
     /**
-     * Muestra el contenido del fichero en el TextView contenidoFichero
-     *
      * Si está vacío -> mostrar un Toast
      */
-    void mostrarContenido() {
+    void recuperarPartidaFichero() {
         boolean hayContenido = false;
         String tmp="";
         BufferedReader fin;
-        contenidoFichero.setText("");
-
         try {
             if (utilizarMemInterna()) {
                 fin = new BufferedReader(
@@ -230,31 +205,23 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
             }
-
             String linea = fin.readLine();
             while (linea != null) {
                 hayContenido = true;
-                contenidoFichero.append(linea + '\n');
-                //mJuego.deserializaTablero(linea);
                 tmp=linea;
                 linea = fin.readLine();
             }
             fin.close();
-            Log.i(LOG_TAG, "MOSTRAR contenido fichero");
+            Log.i(LOG_TAG, "MOSTRAR contenido fichero:"+ tmp);
         } catch (Exception e) {
             Log.e(LOG_TAG, "FILE I/O ERROR: " + e.getMessage());
             e.printStackTrace();
         }
          if((tmp.trim()).equals(mJuego.serializaTablero().trim())){
-            Log.e(LOG_TAG, "IGUAL IGUAL tmp:" +tmp+ " mJuego.serializaTablero():"+mJuego.serializaTablero() );
-            Toast.makeText(this, "tmp == mJuego.serializaTablero()------No se puede recuperar el cambio debido a que no existen cambios", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No existen cambios para recuperar la partida", Toast.LENGTH_SHORT).show();
         }else{
-            Log.e(LOG_TAG, "DIFERENTE IGUAL tmp:" +tmp+ " mJuego.serializaTablero():"+mJuego.serializaTablero() );
-            this.recuperar_juego(tmp);
+           this.recuperar_juego(tmp);
         }
-        //if (!hayContenido) {
-        //    Toast.makeText(this, getString(R.string.aboutMessage), Toast.LENGTH_SHORT).show();
-        //}
     }
 
     /**
@@ -278,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
             }
             fos.close();
             Log.i(LOG_TAG, "opción Limpiar -> VACIAR el fichero");
-            lineaTexto.setText(""); // limpio la linea de edición
         } catch (Exception e) {
             Log.e(LOG_TAG, "FILE I/O ERROR: " + e.getMessage());
             e.printStackTrace();
@@ -291,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
      * @return nombre del fichero
      */
     private String obtenerNombreFichero() {
-        Log.i(LOG_TAG, "metodo ObtenerNombreFichero: " + "Celta.txt");
+        Log.i(LOG_TAG, "Metodo ObtenerNombreFichero: " + "Celta.txt");
         return "Celta.txt";
     }
 
@@ -308,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
     public void recuperar_juego(final String tableroSerializado) {
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
         dialogo1.setTitle("Importante");
-        dialogo1.setMessage("¿ El programa será recuperado, desea continuar ?");
+        dialogo1.setMessage("La partida será recuperada, desea continuar ?");
         dialogo1.setCancelable(false);
         dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
@@ -325,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
     public void aceptarRecuperarPartida(String tableroSerializado) {
         mJuego.deserializaTablero(tableroSerializado);
         this.mostrarTablero();
-        Toast t=Toast.makeText(this,"EL juego ha sido recuperado.", Toast.LENGTH_SHORT);
+        Toast t=Toast.makeText(this,"La partida ha sido recuperada.", Toast.LENGTH_SHORT);
         t.show();
 
     }
