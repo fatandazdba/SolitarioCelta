@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -114,6 +115,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.guardarPartida:
                 this.accionAniadir();
                 break;
+            case R.id.recuperarPartida:
+                this.mostrarContenido();
+                //this.mostrarTablero();
+                break;
             case R.id.menuAbout:
                 startActivity(new Intent(this, About.class));
                 return true;
@@ -189,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             fos.write(mJuego.serializaTablero().toString().getBytes()); //Almacena los datos de la tabla en el archivo
             fos.write('\n');
             fos.close();
-            mostrarContenido();
+            //mostrarContenido();
             Log.i(LOG_TAG, "Click botón Añadir -> AÑADIR al fichero");
         } catch (Exception e) {
             Log.e(LOG_TAG, "FILE I/O ERROR: " + e.getMessage());
@@ -205,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
      */
     void mostrarContenido() {
         boolean hayContenido = false;
+        String tmp="";
         BufferedReader fin;
         contenidoFichero.setText("");
 
@@ -229,6 +235,8 @@ public class MainActivity extends AppCompatActivity {
             while (linea != null) {
                 hayContenido = true;
                 contenidoFichero.append(linea + '\n');
+                //mJuego.deserializaTablero(linea);
+                tmp=linea;
                 linea = fin.readLine();
             }
             fin.close();
@@ -237,9 +245,16 @@ public class MainActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "FILE I/O ERROR: " + e.getMessage());
             e.printStackTrace();
         }
-        if (!hayContenido) {
-            Toast.makeText(this, getString(R.string.aboutMessage), Toast.LENGTH_SHORT).show();
+         if((tmp.trim()).equals(mJuego.serializaTablero().trim())){
+            Log.e(LOG_TAG, "IGUAL IGUAL tmp:" +tmp+ " mJuego.serializaTablero():"+mJuego.serializaTablero() );
+            Toast.makeText(this, "tmp == mJuego.serializaTablero()------No se puede recuperar el cambio debido a que no existen cambios", Toast.LENGTH_SHORT).show();
+        }else{
+            Log.e(LOG_TAG, "DIFERENTE IGUAL tmp:" +tmp+ " mJuego.serializaTablero():"+mJuego.serializaTablero() );
+            this.recuperar_juego(tmp);
         }
+        //if (!hayContenido) {
+        //    Toast.makeText(this, getString(R.string.aboutMessage), Toast.LENGTH_SHORT).show();
+        //}
     }
 
     /**
@@ -264,7 +279,6 @@ public class MainActivity extends AppCompatActivity {
             fos.close();
             Log.i(LOG_TAG, "opción Limpiar -> VACIAR el fichero");
             lineaTexto.setText(""); // limpio la linea de edición
-            mostrarContenido();
         } catch (Exception e) {
             Log.e(LOG_TAG, "FILE I/O ERROR: " + e.getMessage());
             e.printStackTrace();
@@ -290,4 +304,35 @@ public class MainActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "Memoria SD: metodo utilizarMemoriaInterna");
         return true;
     }
+
+    public void recuperar_juego(final String tableroSerializado) {
+        AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+        dialogo1.setTitle("Importante");
+        dialogo1.setMessage("¿ El programa será recuperado, desea continuar ?");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                aceptarRecuperarPartida(tableroSerializado);
+            }
+        });
+        dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                cancelarRecuperarPartida();
+            }
+        });
+        dialogo1.show();
+    }
+    public void aceptarRecuperarPartida(String tableroSerializado) {
+        mJuego.deserializaTablero(tableroSerializado);
+        this.mostrarTablero();
+        Toast t=Toast.makeText(this,"EL juego ha sido recuperado.", Toast.LENGTH_SHORT);
+        t.show();
+
+    }
+
+    public void cancelarRecuperarPartida() {
+        Toast t=Toast.makeText(this,"Favor, continue con el juego.", Toast.LENGTH_SHORT);
+        t.show();
+    }
+
 }

@@ -72,11 +72,6 @@ class JuegoCelta {
      * @return valor lógico
      */
     private boolean movimientoAceptable(int i1, int j1, int i2, int j2) {
-
-
-    	//Log.i("MENSAJE DE SERIALZION", serializaTablero());
-		//this.deserializaTablero("0011100001110011111111010011111111100111000011100");
-
         if (tablero[i1][j1] == 0 || tablero[i2][j2] == 1)
             return false;
 
@@ -126,7 +121,6 @@ class JuegoCelta {
      * @return valor lógico
      */
     public boolean juegoTerminado() {
-
         for (int i = 0; i < TAMANIO; i++)
             for (int j = 0; j < TAMANIO; j++)
                 if (tablero[i][j] == 1) {
