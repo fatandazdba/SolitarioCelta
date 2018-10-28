@@ -32,7 +32,6 @@ public class PartidaAdapter extends ArrayAdapter {
         this.idRecursoLayout=resourse;
         this._partidas = partidas;
         setNotifyOnChange(true);
-        Log.i("DB", "Partidas $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + this._partidas);
     }
 
     @Override

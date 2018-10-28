@@ -2,6 +2,9 @@ package es.upm.miw.SolitarioCelta;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 class JuegoCelta {
 	static final int TAMANIO = 7;
     private static final int NUM_MOVIMIENTOS = 4;
@@ -165,7 +168,7 @@ class JuegoCelta {
 	/**
 	 * Cuenta el numero de fichas al terminar el juego
 	 *
-	 * @return numero de fichas
+	 * @return numero de fichas en el tablero
 	 */
 	public int numeroFichas() {
 		int tmp=0;
@@ -174,5 +177,11 @@ class JuegoCelta {
 				if (tablero[i][j] == 1)
 					tmp++;
 		return tmp;
+	}
+
+	public String getFechaPartida(){
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
+		String date = sdf.format(new Date());
+		return date;
 	}
 }

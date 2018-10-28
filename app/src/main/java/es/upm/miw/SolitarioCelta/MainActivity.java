@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -21,8 +22,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import DB.Partida;
 import DB.PartidaAdapter;
@@ -34,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = "MiW_JUEGO_CELTA";
     private final String CLAVE_TABLERO = "TABLERO_SOLITARIO_CELTA";
 
-
-
     private SharedPreferences preferencias;
 
     RepositorioPartida db;
     ArrayList<Partida> partidas;
+
+    public final static String tvIdentificador="";
 
 	private final int[][] ids = {
 		{       0,        0, R.id.p02, R.id.p03, R.id.p04,        0,        0},
@@ -59,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         mostrarTablero();
 
         db = new RepositorioPartida(getApplicationContext());
-
     }
 
     /**
@@ -73,10 +77,12 @@ public class MainActivity extends AppCompatActivity {
         int j = resourceName.charAt(2) - '0';
 
         mJuego.jugar(i, j);
-
         mostrarTablero();
         if (mJuego.juegoTerminado()) {
             new AlertDialogFragment().show(getFragmentManager(), "ALERT DIALOG");
+        }
+        if(mJuego.juegoTerminado()){
+            db.add("Freddy", mJuego.getFechaPartida(), mJuego.numeroFichas());
         }
     }
 
@@ -156,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         });
         dialogo1.show();
     }
+
     public void aceptarReiniciarPartida() {
         Toast t=Toast.makeText(this,"EL juego ha sido reiniciado.", Toast.LENGTH_SHORT);
         t.show();
@@ -308,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
         });
         dialogo1.show();
     }
+
     public void aceptarRecuperarPartida(String tableroSerializado) {
         mJuego.deserializaTablero(tableroSerializado);
         this.mostrarTablero();
@@ -338,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
         });
         dialogo1.show();
     }
+
     public void aceptarEliminarMejoresResultados() {
         db.deleteAll();
         this.mostrarTablero();
