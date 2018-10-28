@@ -27,6 +27,11 @@
         android:orderInCategory="100"
         android:title="@string/mejoresResultados"/>
     <item
+        android:id="@+id/eliminarMejoresResultados"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="100"
+        android:title="@string/eliminarMejoresResultados"/>
+    <item
         android:id="@+id/preferences"
         android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="100"

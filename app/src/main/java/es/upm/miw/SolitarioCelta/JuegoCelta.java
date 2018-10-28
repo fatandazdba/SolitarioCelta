@@ -15,15 +15,6 @@ class JuegoCelta {
             {0, 0, 1, 1, 1, 0, 0},
             {0, 0, 1, 1, 1, 0, 0}
     };
-    private static final int[][] TABLERO_REINICIAR = { // Posiciones válidas del tablero para reiniciar le juego
-            {0, 0, 1, 0, 1, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0},
-            {1, 1, 1, 0, 0, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1},
-            {0, 0, 1, 0, 1, 0, 0},
-            {0, 0, 1, 1, 1, 0, 0}
-    };
     private static final int[][] desplazamientos = {
             { 0,  2},   // Dcha
             { 0, -2},   // Izda
@@ -169,5 +160,19 @@ class JuegoCelta {
         tablero[TAMANIO / 2][TAMANIO / 2] = 0;   // posición central
 
         estadoJuego = Estado.ESTADO_SELECCION_FICHA;
+	}
+
+	/**
+	 * Cuenta el numero de fichas al terminar el juego
+	 *
+	 * @return numero de fichas
+	 */
+	public int numeroFichas() {
+		int tmp=0;
+		for (int i = 0; i < TAMANIO; i++)
+			for (int j = 0; j < TAMANIO; j++)
+				if (tablero[i][j] == 1)
+					tmp++;
+		return tmp;
 	}
 }

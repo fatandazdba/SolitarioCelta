@@ -41,6 +41,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MejoresResultados"
+            android:parentActivityName=".MainActivity"
+            android:label="MejoresResultados" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         </application>
 
 </manifest>

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -20,6 +21,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+import DB.Partida;
+import DB.PartidaAdapter;
+import DB.RepositorioPartida;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +34,12 @@ public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = "MiW_JUEGO_CELTA";
     private final String CLAVE_TABLERO = "TABLERO_SOLITARIO_CELTA";
 
+
+
     private SharedPreferences preferencias;
+
+    RepositorioPartida db;
+    ArrayList<Partida> partidas;
 
 	private final int[][] ids = {
 		{       0,        0, R.id.p02, R.id.p03, R.id.p04,        0,        0},
@@ -45,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         mJuego = new JuegoCelta();
         mostrarTablero();
+
+        db = new RepositorioPartida(getApplicationContext());
 
     }
 
@@ -108,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.recuperarPartida:
                 this.recuperarPartidaFichero();
+                break;
+            case R.id.mejoresResultados:
+                startActivity(new Intent(this, MejoresResultados.class));
+                break;
+            case R.id.eliminarMejoresResultados:
+                this.eliminarMejoresResultados();
                 break;
             case R.id.menuAbout:
                 startActivity(new Intent(this, About.class));
@@ -298,6 +318,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void cancelarRecuperarPartida() {
         Toast t=Toast.makeText(this,"Favor, continue con el juego.", Toast.LENGTH_SHORT);
+        t.show();
+    }
+
+    public void eliminarMejoresResultados() {
+        AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+        dialogo1.setTitle("Importante");
+        dialogo1.setMessage("La lista de los mejores resultados de las partidas será eliminada, desea continuar?");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                aceptarEliminarMejoresResultados();
+            }
+        });
+        dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                cancelarEliminarMejoresResultados();
+            }
+        });
+        dialogo1.show();
+    }
+    public void aceptarEliminarMejoresResultados() {
+        db.deleteAll();
+        this.mostrarTablero();
+        Toast t=Toast.makeText(this,"La lista de resultados ha sido eliminada.", Toast.LENGTH_SHORT);
+        t.show();
+
+    }
+
+    public void cancelarEliminarMejoresResultados() {
+        Toast t=Toast.makeText(this,"La lista de resultados no ha sido eliminada.", Toast.LENGTH_SHORT);
         t.show();
     }
 
